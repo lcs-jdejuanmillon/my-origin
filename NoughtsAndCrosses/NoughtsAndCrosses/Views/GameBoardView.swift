@@ -36,6 +36,13 @@ struct GameBoardView: View {
     @State var gameWon = false
     
     // MARK: Computed properties
+    var gameStillGoing: Bool {
+        if currentTurn == 10 || gameWon {
+            return false
+        }
+        return true
+    }
+    
     var body: some View {
         
         VStack {
@@ -45,12 +52,15 @@ struct GameBoardView: View {
             // Current player or who won
             Text("Current player is: \(currentPlayer)")
                 // Only show when game is not over
-                .opacity(gameWon == false ? 1.0 : 0.0)
-
+                .opacity(!gameStillGoing ? 1.0 : 0.0)
+            ZStack {
             Text("\(currentPlayer) wins!")
                 // Only show when game IS over
-                .opacity(gameWon == true ? 1.0 : 0.0)
-
+                .opacity(gameWon ? 1.0 : 0.0)
+                Text("The game ended with a tie!")
+                    // Only show when game IS over
+                    .opacity(currentTurn == 10 && !gameWon ? 1.0 : 0.0)
+            }
             Spacer()
             
             // Top row
@@ -58,12 +68,15 @@ struct GameBoardView: View {
                 // Send connection to properties on this view
                 // to the helper view using a binding
                 TileView(state: $upperLeft,
+                         gameStillGoing: gameStillGoing,
                          player: currentPlayer,
                          turn: $currentTurn)
                 TileView(state: $upperMiddle,
+                         gameStillGoing: gameStillGoing,
                          player: currentPlayer,
                          turn: $currentTurn)
                 TileView(state: $upperRight,
+                         gameStillGoing: gameStillGoing,
                          player: currentPlayer,
                          turn: $currentTurn)
             }
@@ -71,12 +84,15 @@ struct GameBoardView: View {
             // Middle row
             HStack {
                 TileView(state: $middleLeft,
+                         gameStillGoing: gameStillGoing,
                          player: currentPlayer,
                          turn: $currentTurn)
                 TileView(state: $middleMiddle,
+                         gameStillGoing: gameStillGoing,
                          player: currentPlayer,
                          turn: $currentTurn)
                 TileView(state: $middleRight,
+                         gameStillGoing: gameStillGoing,
                          player: currentPlayer,
                          turn: $currentTurn)
             }
@@ -84,12 +100,15 @@ struct GameBoardView: View {
             // Bottom row
             HStack {
                 TileView(state: $bottomLeft,
+                         gameStillGoing: gameStillGoing,
                          player: currentPlayer,
                          turn: $currentTurn)
                 TileView(state: $bottomMiddle,
+                         gameStillGoing: gameStillGoing,
                          player: currentPlayer,
                          turn: $currentTurn)
                 TileView(state: $bottomRight,
+                         gameStillGoing: gameStillGoing,
                          player: currentPlayer,
                          turn: $currentTurn)
             }
@@ -101,7 +120,7 @@ struct GameBoardView: View {
                 
                 Text("Current turn is: \(currentTurn)")
                     // Only show when game is not over
-                    .opacity(gameWon == false ? 1.0 : 0.0)
+                    .opacity(gameStillGoing ? 1.0 : 0.0)
                 
                 Button(action: {
                     resetGame()
@@ -109,7 +128,7 @@ struct GameBoardView: View {
                     Text("New Game")
                 })
                 // Only show when game IS over
-                .opacity(gameWon == true ? 1.0 : 0.0)
+                .opacity(!gameStillGoing ? 1.0 : 0.0)
                 
             }
             

@@ -16,7 +16,7 @@ struct TileView: View {
     // When state changes here, it's new value is
     // sent there to be saved.
     @Binding var state: String
-    
+    let gameStillGoing: Bool
     // Which player tapped this tile?
     let player: String
     
@@ -37,11 +37,11 @@ struct TileView: View {
             .onTapGesture {
                 
                 // Make this tile show the symbol for the current player
-                state = player
-                
-                // Advance to next turn
-                turn += 1
-                
+                if state == "" && gameStillGoing {
+                    state = player
+                    // Advance to next turntr
+                    turn += 1
+                }
             }
     }
     
@@ -49,13 +49,13 @@ struct TileView: View {
 
 struct TileView_Previews: PreviewProvider {
     static var previews: some View {
-        TileView(state: .constant(empty),
+        TileView(state: .constant(empty), gameStillGoing: true,
                  player: nought,
                  turn: .constant(1))
-        TileView(state: .constant(nought),
+        TileView(state: .constant(nought), gameStillGoing: true,
                  player: nought,
                  turn: .constant(1))
-        TileView(state: .constant(cross),
+        TileView(state: .constant(cross), gameStillGoing: true,
                  player: nought,
                  turn: .constant(1))
     }
