@@ -56,7 +56,7 @@ struct GameBoardView: View {
             ZStack {
             Text("\(currentPlayer) wins!")
                 // Only show when game IS over
-                .opacity(gameWon ? 1.0 : 0.0)
+                .opacity(gameWon ? 0.0 : 1.0)
                 Text("The game ended with a tie!")
                     // Only show when game IS over
                     .opacity(currentTurn == 10 && !gameWon ? 1.0 : 0.0)
