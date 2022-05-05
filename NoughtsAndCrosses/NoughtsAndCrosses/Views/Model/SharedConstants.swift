@@ -11,3 +11,6 @@ import Foundation
 let empty = ""
 let nought = "⭘"
 let cross = "✕"
+
+// Constant to describe when a game was not won by either player
+let draw = "Draw"

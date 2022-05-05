@@ -35,6 +35,9 @@ struct GameBoardView: View {
     // Tracks whether game is won or not
     @State var gameWon = false
     
+    // Tracks the history of prior games played
+    @State var history: [GameResult] = []
+    
     // MARK: Computed properties
     var gameStillGoing: Bool {
         if currentTurn == 10 || gameWon {
@@ -50,7 +53,9 @@ struct GameBoardView: View {
             Spacer()
 
             // Current player or who won
-            Text("Current player is: \(currentPlayer)")
+            ZStack {
+                
+                Text("Current player is: \(currentPlayer)")
                 // Only show when game is not over
                 .opacity(!gameStillGoing ? 0.0 : 1.0)
             ZStack {
@@ -112,11 +117,58 @@ struct GameBoardView: View {
                          player: currentPlayer,
                          turn: $currentTurn)
             }
+            .padding(.vertical)
+
+            Spacer()
+
+            // The game board
+            Group {
+                // Top row
+                HStack {
+                    // Send connection to properties on this view
+                    // to the helper view using a binding
+                    TileView(state: $upperLeft,
+                             player: currentPlayer,
+                             turn: $currentTurn)
+                    TileView(state: $upperMiddle,
+                             player: currentPlayer,
+                             turn: $currentTurn)
+                    TileView(state: $upperRight,
+                             player: currentPlayer,
+                             turn: $currentTurn)
+                }
+                
+                // Middle row
+                HStack {
+                    TileView(state: $middleLeft,
+                             player: currentPlayer,
+                             turn: $currentTurn)
+                    TileView(state: $middleMiddle,
+                             player: currentPlayer,
+                             turn: $currentTurn)
+                    TileView(state: $middleRight,
+                             player: currentPlayer,
+                             turn: $currentTurn)
+                }
+                
+                // Bottom row
+                HStack {
+                    TileView(state: $bottomLeft,
+                             player: currentPlayer,
+                             turn: $currentTurn)
+                    TileView(state: $bottomMiddle,
+                             player: currentPlayer,
+                             turn: $currentTurn)
+                    TileView(state: $bottomRight,
+                             player: currentPlayer,
+                             turn: $currentTurn)
+                }
+            }
             
             Spacer()
 
             // Current turn or new game
-            Group {
+            ZStack {
                 
                 Text("Current turn is: \(currentTurn)")
                     // Only show when game is not over
@@ -131,8 +183,22 @@ struct GameBoardView: View {
                 .opacity(!gameStillGoing ? 1.0 : 0.0)
                 
             }
+            .padding(.vertical)
             
             Spacer()
+            
+            HStack {
+                Text("History")
+                    .font(.title3)
+                    .bold()
+                Spacer()
+            }
+            .padding(.horizontal)
+            
+            // History of prior games played
+            List(history) { currentResult in
+                GameResultView(result: currentResult)
+            }
             
         }
         .onChange(of: currentTurn) { newValue in
@@ -194,8 +260,12 @@ struct GameBoardView: View {
                 bottomLeft == currentPlayer
             {
                 
+                // Game has been won
                 gameWon = true
                 print("Game won by \(currentPlayer)...")
+                
+                // Save the result
+                saveResult()
                 
                 // End function now
                 return
@@ -211,6 +281,38 @@ struct GameBoardView: View {
             currentPlayer = nought
         }
 
+    }
+
+    /// Adds the result of a game to a list that tracks the history of prior games played.
+    /// - Tag: adding_to_list
+    func saveResult() {
+        
+        // Create an instance of the GameResult structure
+        let newResult = GameResult(outcome: gameWon == false ? draw : currentPlayer,    // "Draw" when game
+                                                                                        // over but not won...
+                                                                                        //
+                                                                                        // "⭘" or "✕" otherwise
+                                   
+                                   turnsTotal: currentTurn - 1,     // If game was won on turn 5,
+                                                                    // currentTurn would be 6 when
+                                                                    // win is detected
+
+                                   upperLeft: upperLeft,            // Rest of arguments are the state
+                                   upperMiddle: upperMiddle,        // of the game board...
+                                   upperRight: upperRight,
+                                   middleLeft: middleLeft,
+                                   middleMiddle: middleMiddle,
+                                   middleRight: middleRight,
+                                   bottomLeft: bottomLeft,
+                                   bottomMiddle: bottomMiddle,
+                                   bottomRight: bottomRight)
+        
+        // Actually add the result to the top of list of results
+        history.insert(newResult, at: 0)
+        
+        // DEBUG: Print the contents of the history list to the console
+        print(dump(history))
+        
     }
     
     func resetGame() {

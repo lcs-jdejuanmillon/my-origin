@@ -9,10 +9,49 @@
       name = "InputModes">
       <Group
          location = "container:"
+         name = "FromOnlineDataStream">
+         <FileRef
+            location = "group:SongBrowser/SongBrowser.xcodeproj">
+         </FileRef>
+      </Group>
+      <Group
+         location = "container:"
+         name = "FromFileInAppBundle">
+         <FileRef
+            location = "group:MatchingGame/MatchingGame.xcodeproj">
+         </FileRef>
+      </Group>
+      <Group
+         location = "container:"
          name = "UserAction">
+         <FileRef
+            location = "group:MultiplicationMaestro/MultiplicationMaestro.xcodeproj">
+         </FileRef>
          <FileRef
             location = "group:NoughtsAndCrosses/NoughtsAndCrosses.xcodeproj">
          </FileRef>
       </Group>
+   </Group>
+   <Group
+      location = "container:"
+      name = "SupportingImages">
+      <FileRef
+         location = "group:song-browser.png">
+      </FileRef>
+      <FileRef
+         location = "group:matching-game.png">
+      </FileRef>
+      <FileRef
+         location = "group:multiplication-maestro-something-missing.png">
+      </FileRef>
+      <FileRef
+         location = "group:multiplication-maestro-tabs.png">
+      </FileRef>
+      <FileRef
+         location = "group:multiplication-maestro.png">
+      </FileRef>
+      <FileRef
+         location = "group:noughts-and-crosses.png">
+      </FileRef>
    </Group>
 </Workspace>
