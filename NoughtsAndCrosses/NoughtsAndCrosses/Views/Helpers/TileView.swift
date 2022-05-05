@@ -40,11 +40,8 @@ struct TileView: View {
                 
                 // Make this tile show the symbol for the current player
                 if state == "" && gameStillGoing {
-                    state = player
-                    // Advance to next turntr
-                    turn += 1
+                    handleUserAction()
                 }
-                handleUserAction()
             }
     }
 
